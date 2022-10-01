@@ -1,4 +1,5 @@
 import sys
+# CHANGE IT TO YOUR OWN HOME PATH
 sys.path.insert(1, 'C://Users//diego//OneDrive//Escritorio//Desktop//Texas Tech University//Fall-2022//Information retrieval//IR-system//LazyShop-IR')
 
 import time
