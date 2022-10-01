@@ -1,0 +1,5 @@
+from factories.controllers.auto_runners.get_inverted_index_zonal_dictionary_controller_factory import makeGetInvertedIndexZonalDictionaryController
+
+inverted_index_zonal_dictionary = makeGetInvertedIndexZonalDictionaryController().execute()
+
+print(inverted_index_zonal_dictionary)
