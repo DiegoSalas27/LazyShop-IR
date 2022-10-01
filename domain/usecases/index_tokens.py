@@ -1,5 +1,4 @@
 import abc
-from pandas import DataFrame
 
 # this is the interface for the indexer
 class IndexTokens(metaclass=abc.ABCMeta): # formal way to define interfaces in python

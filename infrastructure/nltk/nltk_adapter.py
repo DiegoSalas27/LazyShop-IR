@@ -1,3 +1,4 @@
+from typing import Any
 from services.protocols.nl_util import NlUtil
 import nltk
 nltk.download('stopwords')
@@ -19,3 +20,6 @@ class NltkAdapter(NlUtil):
 
   def stop_words(self) -> set:
     return stop_words
+
+  def edit_distance(self, queryTerm: str, dictionaryTerm: str) -> Any:
+    return nltk.edit_distance(queryTerm, dictionaryTerm)

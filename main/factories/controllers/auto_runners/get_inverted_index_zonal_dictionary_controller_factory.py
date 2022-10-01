@@ -1,6 +1,3 @@
-import sys
-
-sys.path.insert(1, 'C://Users//diego//OneDrive//Escritorio//Desktop//Texas Tech University//Fall-2022//Information retrieval//IR-system//LazyShop-IR')
 from factories.usecases.index_tokens_service_factory import makeIndexTokensService
 from factories.usecases.modify_tokens_service_factory import makeModifyTokensService
 from factories.usecases.read_csv_service_factory import makeReadCsvService

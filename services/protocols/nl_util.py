@@ -1,4 +1,5 @@
 import abc
+from typing import Any
 
 # this is the interface for the Natural Langue Util
 class NlUtil(metaclass=abc.ABCMeta): # formal way to define interfaces in python
@@ -9,7 +10,9 @@ class NlUtil(metaclass=abc.ABCMeta): # formal way to define interfaces in python
       hasattr(subclass, 'word_stemmer') and 
       callable(subclass.word_stemmer) and
       hasattr(subclass, 'stop_words') and 
-      callable(subclass.stop_words))
+      callable(subclass.stop_words) and
+      hasattr(subclass, 'edit_distance') and 
+      callable(subclass.edit_distance))
 
   # abstract methods allows us to define functions for interfaces
   @abc.abstractmethod
@@ -25,4 +28,9 @@ class NlUtil(metaclass=abc.ABCMeta): # formal way to define interfaces in python
   @abc.abstractmethod
   def stop_words(self) -> set:
     """returns a list of stop words"""
+    raise NotImplementedError
+
+  @abc.abstractmethod
+  def edit_distance(self, queryTerm: str, dictionaryTerm: str) -> Any:
+    """Calculate the Levenshtein edit-distance between two strings"""
     raise NotImplementedError
