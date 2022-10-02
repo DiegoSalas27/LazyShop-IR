@@ -1,7 +1,7 @@
 from domain.usecases.index_tokens import IndexTokens
 from domain.constants import terms_dictionary_for_zone
 
-# this class implements the index_tokens interface
+# this class implements the indexer interface
 class IndexTokensService(IndexTokens):
 
   def build_inverted_index(self, zone: str, docID: int, modified_tokens: list[str]) -> dict[str, dict]:

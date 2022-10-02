@@ -3,7 +3,7 @@ from domain.usecases.read_csv import ReadCsv
 from services.protocols.file_manager import FileManager
 
 
-# this class implements the tokenize interface
+# this class implements the read csv interface
 class ReadCsvService(ReadCsv):
   def __init__(self, fileManager: FileManager):
     self.fileManager = fileManager

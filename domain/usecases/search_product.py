@@ -1,7 +1,7 @@
 import abc
 from domain.models.query_result import QueryResult
 
-# this is the interface for the indexer
+# this is the interface for the search engine
 class SearchProduct(metaclass=abc.ABCMeta): # formal way to define interfaces in python
   @classmethod
   def __subclasshook__(cls, subclass):

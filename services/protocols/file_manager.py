@@ -1,7 +1,7 @@
 import abc
 from pandas import DataFrame
 
-# this is the interface for the file reader
+# this is the interface for the file manager
 class FileManager(metaclass=abc.ABCMeta): # formal way to define interfaces in python
   @classmethod
   def __subclasshook__(cls, subclass):

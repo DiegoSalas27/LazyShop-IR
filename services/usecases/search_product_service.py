@@ -3,7 +3,7 @@ from domain.models.query_result import QueryResult
 from domain.usecases.search_product import SearchProduct
 from services.protocols.nl_util import NlUtil
 
-# this class implements the index_tokens interface
+# this class implements the search engine interface
 class SearchProductService(SearchProduct):
   def __init__(self, nlUtil: NlUtil, inverted_index_zonal_dictionary: dict[str, dict]):
     self.nlUtil = nlUtil

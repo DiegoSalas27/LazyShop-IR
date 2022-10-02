@@ -4,7 +4,7 @@ from typing_extensions import LiteralString
 from domain.usecases.modify_tokens import ModifyTokens
 from services.protocols.nl_util import NlUtil
 
-# this class implements the modify_tokens interface
+# this class implements the linguistic modules interface
 class ModifyTokensService(ModifyTokens):
   def __init__(self, nlUtil: NlUtil):
     self.nlUtil = nlUtil

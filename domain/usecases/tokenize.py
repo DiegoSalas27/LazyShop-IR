@@ -11,6 +11,6 @@ class Tokenize(metaclass=abc.ABCMeta): # formal way to define interfaces in pyth
   # abstract methods allows us to define functions for interfaces
   @abc.abstractmethod
   def tokenize(self, doc: Any) -> list[str]:
-    """Read csv file and looks for zones to tokenize
+    """Tokenises the words in the row of the selected zone
       \n\n returns all the lists of the rows of each selected zone"""
     raise NotImplementedError
