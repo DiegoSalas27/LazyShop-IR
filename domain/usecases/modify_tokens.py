@@ -14,13 +14,13 @@ class ModifyTokens(metaclass=abc.ABCMeta): # formal way to define interfaces in 
 
   # abstract methods allows us to define functions for interfaces
   @abc.abstractmethod
-  def _stem(self, sentence_doc: list[str]) -> LiteralString: # private method
+  def stem(self, sentence_doc: list[str]) -> LiteralString: # private method
     """stems all words in doc and joins the stemmed tokens back into a sentence for further procesing
       \n\n returns the stemmed tokens as a sentence for further processing"""
     raise NotImplementedError
 
   @abc.abstractmethod
-  def _string_replacement(self, sentence_doc: list[str]) -> str: # private method
+  def string_replacement(self, sentence_doc: list[str]) -> str: # private method
     """process the given string performing replacements using regex patterns 
       \n\n returns the replaced stemmed sentenced"""
     raise NotImplementedError

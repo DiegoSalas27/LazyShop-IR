@@ -1,0 +1,5 @@
+streamlit
+nltk
+pandas
+
+python -m streamlit run main/server.py
