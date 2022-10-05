@@ -1,11 +1,10 @@
 import sys
 # CHANGE IT TO YOUR OWN HOME PATH
 sys.path.insert(1, 'C://Users//diego//OneDrive//Escritorio//Desktop//Texas Tech University//Fall-2022//Information retrieval//IR-system//LazyShop-IR')
-
 import time
+from main.factories.controllers.get_inverted_index_zonal_dictionary_controller_factory import makeGetInvertedIndexZonalDictionaryController
+from main.factories.controllers.search_product_controller_factory import makeSearchProductController
 from domain.models.query_result import QueryResult
-from factories.controllers.auto_runners.get_inverted_index_zonal_dictionary_controller_factory import makeGetInvertedIndexZonalDictionaryController
-from factories.controllers.queries.search_product_controller_factory import makeSearchProductController
 
 if __name__ == '__main__':
   while True:
