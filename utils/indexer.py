@@ -1,10 +1,12 @@
-from domain.usecases.index_tokens import IndexTokens
-from domain.constants import terms_dictionary_for_zone
+from constants import terms_dictionary_for_zone
 
-# this class implements the indexer interface
-class IndexTokensService(IndexTokens):
+# this class implements the indexer
+class Indexer:
 
-  def build_inverted_index(self, zone: str, docID: int, modified_tokens: list[str]) -> dict[str, dict]:
+  @staticmethod
+  def build_inverted_index(zone: str, docID: int, modified_tokens: list[str]) -> dict[str, dict]:
+    """Builds the inverted index based on the modified tokens from the linguistic modules
+    \n\n returns the inverted index dictionary"""
     for term in modified_tokens: # 'str'
       # for each zone the term increased in doc freq and appends the posting list if term exists
       if term in terms_dictionary_for_zone[zone]:

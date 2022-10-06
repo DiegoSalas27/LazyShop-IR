@@ -1,24 +1,33 @@
 import re
 from string import punctuation
+from utils.tokenizer import Tokenizer
+import nltk
+from nltk.stem.porter import PorterStemmer
+p_stemmer = PorterStemmer()
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+stop_words = set(stopwords.words('english'))
 from typing_extensions import LiteralString
-from domain.usecases.modify_tokens import ModifyTokens
-from services.protocols.nl_util import NlUtil
 
-# this class implements the linguistic modules interface
-class ModifyTokensService(ModifyTokens):
-  def __init__(self, nlUtil: NlUtil):
-    self.nlUtil = nlUtil
-
-  def stem(self, sentence_doc: list[str]) -> LiteralString: # private method
+# this class implements the linguistic modules
+class LinguisticModules:
+  
+  @staticmethod
+  def stem(sentence_doc: list[str]) -> LiteralString:
+    """stems all words in doc and joins the stemmed tokens back into a sentence for further procesing
+    \n\n returns the stemmed tokens as a sentence for further processing"""
     # stems all words in doc
-    sentence_str_1 = [self.nlUtil.word_stemmer(word_tk) for word_tk in sentence_doc]  # list[str,]
+    sentence_str_1 = [p_stemmer.stem(word_tk) for word_tk in sentence_doc]  # list[str,]
     # joins the stemmed tokens back into a sentence for further procesing
     sentence_str_1 = " ".join(sentence_str_1) # str
 
     return sentence_str_1
 
-  def string_replacement(self, sentence_doc: list[str]) -> str: # private method
-    stemmed_sentence = self.stem(sentence_doc)
+  @staticmethod
+  def string_replacement(sentence_doc: list[str]) -> str: # private method
+    """process the given string performing replacements using regex patterns 
+    \n\n returns the replaced stemmed sentenced"""
+    stemmed_sentence = LinguisticModules.stem(sentence_doc)
     # subs all symbols/punctuations (including space) with a space (' '); excludes digits
     replaced_str = re.sub(r'\W+', ' ', stemmed_sentence)
     # subs all digits with a space (' '); a sequence of digits (without space) is given one (' ')
@@ -30,11 +39,14 @@ class ModifyTokensService(ModifyTokens):
 
     return replaced_str
 
-  def modify_tokens(self, sentence_doc: list[str]) -> list[str]:
-    replaced_string = self.string_replacement(sentence_doc)
+  @staticmethod
+  def modify_tokens(sentence_doc: list[str]) -> list[str]:
+    """process the given string performing replacements using business logic and deleting stop-words 
+    \n\n returns the replaced senteced without stop-words"""
+    replaced_string = LinguisticModules.string_replacement(sentence_doc)
 
     # tokenize to clean up one more time if 're' has introduced and garbage
-    tokenized_words = self.nlUtil.word_tokenizer(replaced_string) # list[str,]
+    tokenized_words = Tokenizer.tokenize(replaced_string) # list[str,]
     # strip removes whitespace at beginning and end of string (not in between)
     modified_tokens = [str(word_tk_1).strip() for word_tk_1 in tokenized_words] # list[str,]
     # strings with >=2 chars only
@@ -42,7 +54,7 @@ class ModifyTokensService(ModifyTokens):
     # strings which are not symbols/punctuations
     modified_tokens = [word_str for word_str in modified_tokens  if word_str not in punctuation]
     # strings which are not stop-words; check with: Spacy_Eng.vocab['word'].is_stop
-    modified_tokens = [word_str for word_str in modified_tokens if word_str not in self.nlUtil.stop_words()]
+    modified_tokens = [word_str for word_str in modified_tokens if word_str not in stop_words]
 
 
     return modified_tokens
