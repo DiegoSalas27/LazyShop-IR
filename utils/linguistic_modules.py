@@ -1,3 +1,19 @@
+"""
+AUTHOR: P Shiva Kumar / Diego Salas Noain
+FILENAME: linguistic_modules.py
+SPECIFICATION: 
+  - We need to preprocess the data
+  - We create a utility class that can perform linguistic modules operations
+  - We should retrieve normlized terms ready for indexing
+FOR: CS 5364 Information Retrieval Section 001 
+"""
+
+"""
+NAME: LinguisticModules 
+PURPOSE: LinguisticModules class is a utility class that preprocess the data by stemming, string replacement with regex deleting stop words
+INVARIANTS: There are no invariants
+"""
+
 import re
 from string import punctuation
 from utils.tokenizer import Tokenizer
@@ -11,7 +27,13 @@ from typing_extensions import LiteralString
 
 # this class implements the linguistic modules
 class LinguisticModules:
-  
+  """
+  NAME: stem
+  PARAMETERS: sentence_doc
+  PURPOSE: stems all words in doc and joins the stemmed tokens back into a sentence for further procesing
+  PRECONDITION: a sentence is given as a list of strings
+  POSTCONDITION: returns the stemmed tokens as a sentence for further processing
+  """
   @staticmethod
   def stem(sentence_doc: list[str]) -> LiteralString:
     """stems all words in doc and joins the stemmed tokens back into a sentence for further procesing
@@ -23,6 +45,13 @@ class LinguisticModules:
 
     return sentence_str_1
 
+  """
+  NAME: string_replacement
+  PARAMETERS: sentence_doc
+  PURPOSE: process the given string performing replacements using regex patterns 
+  PRECONDITION: the given sentence was stemmed. This function is called after the given stence was stemmed
+  POSTCONDITION: returns the replaced stemmed sentenced by using regex patterns
+  """
   @staticmethod
   def string_replacement(sentence_doc: list[str]) -> str: # private method
     """process the given string performing replacements using regex patterns 
@@ -39,10 +68,17 @@ class LinguisticModules:
 
     return replaced_str
 
+  """
+  NAME: modify_tokens
+  PARAMETERS: sentence_doc
+  PURPOSE: process the given string performing replacements using business logic and deleting stop-words
+  PRECONDITION: the given sentence was stemmed and replaced by regex patterns. This function is called after the sentence has been stemmed and replaced by regex patterns
+  POSTCONDITION: returns the replaced sentece without stop-words
+  """
   @staticmethod
   def modify_tokens(sentence_doc: list[str]) -> list[str]:
     """process the given string performing replacements using business logic and deleting stop-words 
-    \n\n returns the replaced senteced without stop-words"""
+    \n\n returns the replaced sentece without stop-words"""
     replaced_string = LinguisticModules.string_replacement(sentence_doc)
 
     # tokenize to clean up one more time if 're' has introduced and garbage

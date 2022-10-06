@@ -1,10 +1,32 @@
+"""
+AUTHOR: P Shiva Kumar / Diego Salas Noain
+FILENAME: zonal_inverted_index_controller.py
+SPECIFICATION: 
+  - Need to have a point of entry for creating the zonal inverted index
+  - Create a controller class that can do that work
+FOR: CS 5364 Information Retrieval Section 001 
+"""
+
+"""
+NAME: InvertedIndexZonalDictionaryController 
+PURPOSE: InvertedIndexZonalDictionaryController class is a class that executes a series steps to build an inverted zonal index
+INVARIANTS: There are no invariants
+"""
+
 import pandas as pd
 from constants import terms_dictionary_for_zone
 from utils.tokenizer import Tokenizer
 from utils.linguistic_modules import LinguisticModules
 from utils.indexer import Indexer
 
-class InvertedIndexZonalDictionaryController:
+class InvertedIndexZonalDictionaryController: 
+  """
+  NAME: execute
+  PARAMETERS: none
+  PURPOSE: Creates a zonal inverted index
+  PRECONDITION: No precondition
+  POSTCONDITION: Retrieves an zonal inverted index by updating the terms_dictionary_for_zone dictionary and retrieves the df for further use
+  """
   def execute(self) -> tuple[dict[str, dict], pd.DataFrame]: 
     """Executes a series of services.
     \n\n returns what its implementation is meant to return"""
