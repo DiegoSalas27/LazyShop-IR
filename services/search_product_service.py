@@ -41,7 +41,7 @@ class SearchProductService:
   POSTCONDITION: posting_list is updated by being appended the appropiate documents to retrieve
   """
   def _edit_distance(self, query_terms: list[str], posting_list: list[int], each_term: int): # private method
-    for term in query_terms[:]: # str       
+    for term in query_terms[:]: # str     
       # for individual terms compute edit distance with each term in the 'name' inverted-index dictionary
       # this is useful if there is a typo in one or multiple of the query terms
       edit_dist_list = [[key, nltk.edit_distance(term, key)]  for key in self.inverted_index_zonal_dictionary[0]['name']] # list[[str, double], ]
@@ -66,8 +66,11 @@ class SearchProductService:
   """
   def _compute_higest_priority(self, posting_list: list[int]) -> tuple[list[int], list[int]]: # private method
     # for mutltiple query terms, the highest priority posting lists are ones which has ALL the terms in the query (AND query) 
-    posting_list_combined_for_and_high_priority = set.intersection(*map(set, posting_list)) # set[int, ]
-    posting_list_combined_for_and_high_priority = list(posting_list_combined_for_and_high_priority) # list[int, ]
+    if posting_list:
+        posting_list_combined_for_and_high_priority = set.intersection(*map(set, posting_list)) # set[int, ]
+        posting_list_combined_for_and_high_priority = list(posting_list_combined_for_and_high_priority) # list[int, ]
+    else:
+        posting_list_combined_for_and_high_priority = []
 
     # for multiple query terms, we also get (OR query)
     posting_list_combined = list(itertools.chain(*posting_list)) # list[int, ]
@@ -86,7 +89,8 @@ class SearchProductService:
   def query_processing(self, query: str, df: DataFrame) ->  tuple[list[int], DataFrame]:
     """Search for a product based given a query string using an inverted index
     \n\n returns a tuple"""
-    if query == '':
+
+    if query == ' ' or query == '':
       return None, None
 
     posting_list: list[int] = [] # list[]
@@ -96,6 +100,7 @@ class SearchProductService:
     modified_query = LinguisticModules.modify_tokens(sentence_doc)
 
     res = self._edit_distance(modified_query, posting_list, each_term)
+
     if res != None and res[0] == 0 and res[1] == 0:
       return 0, 0
 
@@ -110,6 +115,8 @@ class SearchProductService:
     act_docs = pd.DataFrame(df.loc[posting_list_combined_for_and_high_priority])
     for docID_of_cur_term in posting_list_combined_for_and_high_priority:
         print(pd.DataFrame(df.loc[docID_of_cur_term]))
+    if len(act_docs) == 0:
+      return "Sorry there are no results for your search", 0
     return posting_list_combined_for_and_high_priority, act_docs
 
 
