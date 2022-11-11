@@ -83,7 +83,7 @@ class SearchProductService:
   PRECONDITION: a query is given and a dataframe is given.
   POSTCONDITION: postings list of high and low priority are combined and returned
   """
-  def query_processing(self, query: str, df: DataFrame) ->  tuple[list[int], DataFrame]:
+  def query_processing(self, query: str) ->  list[int]:
     """Search for a product based given a query string using an inverted index
     \n\n returns a tuple"""
     if query == '':
@@ -104,13 +104,9 @@ class SearchProductService:
     # we append the OR query after the AND query as OR is deemed as lower priority here
     for docID_low_priority in posting_list_combined_for_or_low_priority: # int
         if docID_low_priority not in posting_list_combined_for_and_high_priority:
-            posting_list_combined_for_and_high_priority.append(docID_low_priority) # list[int,]
+            posting_list_combined_for_and_high_priority.append(docID_low_priority + 1) # list[int,]
 
-     # return the posting list from above
-    act_docs = pd.DataFrame(df.loc[posting_list_combined_for_and_high_priority])
-    for docID_of_cur_term in posting_list_combined_for_and_high_priority:
-        print(pd.DataFrame(df.loc[docID_of_cur_term]))
-    return posting_list_combined_for_and_high_priority, act_docs
+    return posting_list_combined_for_and_high_priority
 
 
     

@@ -33,12 +33,12 @@ class Indexer:
       # for each zone the term increased in doc freq and appends the posting list if term exists
       if term in terms_dictionary_for_zone[zone]:
           terms_dictionary_for_zone[zone][term][0] += 1 # int; doc freq
-          terms_dictionary_for_zone[zone][term][1].append(docID) # list[int,]
+          terms_dictionary_for_zone[zone][term][1].append(docID + 1) # list[int,]
       # if term doesnt exist, put doc freq as 1 and append the first posting list
       else:
           terms_dictionary_for_zone[zone][term] = [[],[]] # list[[int], [int, ]]; list[[doc freq], [docIds,]]
           terms_dictionary_for_zone[zone][term][0] = 1 # int; doc freq
-          terms_dictionary_for_zone[zone][term][1].append(docID)
+          terms_dictionary_for_zone[zone][term][1].append(docID + 1)
 
     return terms_dictionary_for_zone
       

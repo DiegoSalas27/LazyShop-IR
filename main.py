@@ -11,26 +11,31 @@ import os
 dirpath = os.getcwd()
 import sys
 sys.path.insert(1, dirpath)
-import streamlit as st
+from flask import Flask, jsonify, request
 from controllers.zonal_inverted_index_controller import InvertedIndexZonalDictionaryController
 from controllers.search_product_controller import SearchProductController
 from services.search_product_service import SearchProductService
 
-if __name__ == '__main__':
-  print('creating inverted index')
+# creating a Flask app
+app = Flask(__name__)
 
-  inverted_index_zonal_dictionary, df = InvertedIndexZonalDictionaryController().execute()
+print('creating inverted index')
 
-  # execute queries 
+inverted_index_zonal_dictionary, df = InvertedIndexZonalDictionaryController().execute()
 
-  st.header("Walmart: Search for items") # Display text in header formatting.
-
-  query = st.text_input("Type here", "Spider") # Display a single-line text input widget.
+# on the terminal type: curl http://127.0.0.1:5000/
+# enter a query parameter
+@app.route('/search', methods = ['GET'])
+def home():
+  args = request.args
+  query = args.get('query')
 
   # instantiates classes
   searchProduct = SearchProductService(inverted_index_zonal_dictionary)
-  all_postings, act_docs =  SearchProductController(searchProduct, df, query).execute()
+  all_postings =  SearchProductController(searchProduct, query).execute()
+  return jsonify({ 'data': all_postings })
 
-  # Write arguments to the app.
-  st.write('items:\n',act_docs)
-  st.write('postings list: \n', all_postings)
+if __name__ == '__main__':
+  app.run(debug = True)
+
+

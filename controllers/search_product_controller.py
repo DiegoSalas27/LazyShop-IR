@@ -27,10 +27,8 @@ class SearchProductController:
   def __init__(
     self, 
     searchProduct: SearchProductService,
-    df: DataFrame,
     query: str):
       self.searchProduct = searchProduct
-      self.df = df
       self.query = query
 
   """
@@ -40,11 +38,11 @@ class SearchProductController:
   PRECONDITION: The zonal inverted index has been created and both the DataFrame and query are given
   POSTCONDITION: Retrieves all postings and the documents
   """
-  def execute(self) -> tuple[list[int], DataFrame]:
+  def execute(self) -> list[int]:
     """Executes a series of services.
     \n\n returns what its implementation is meant to return"""
-    all_postings, act_docs = self.searchProduct.query_processing(self.query, self.df)
+    all_postings = self.searchProduct.query_processing(self.query)
               
-    return all_postings, act_docs
+    return all_postings
 
     

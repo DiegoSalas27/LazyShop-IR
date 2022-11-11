@@ -30,7 +30,7 @@ class InvertedIndexZonalDictionaryController:
   def execute(self) -> tuple[dict[str, dict], pd.DataFrame]: 
     """Executes a series of services.
     \n\n returns what its implementation is meant to return"""
-    df = pd.read_csv("walmart-products-modified.csv", encoding='latin1')
+    df = pd.read_csv("walmart-products-detail.csv", encoding='latin1')
 
     for zone in df.columns:
         # only doing indexing for the chosen zones above
