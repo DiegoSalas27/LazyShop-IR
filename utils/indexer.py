@@ -31,14 +31,19 @@ class Indexer:
     \n\n returns the inverted index dictionary"""
     for term in modified_tokens: # 'str'
       # for each zone the term increased in doc freq and appends the posting list if term exists
-      if term in terms_dictionary_for_zone[zone]:
-          terms_dictionary_for_zone[zone][term][0] += 1 # int; doc freq
-          terms_dictionary_for_zone[zone][term][1].append(docID + 1) # list[int,]
+      if term in terms_dictionary_for_zone[zone]: # previously from this doc or other docs
+        if docID in terms_dictionary_for_zone[zone][term][1].keys(): # previously from this doc
+          org_val = terms_dictionary_for_zone[zone][term][1][docID]
+          terms_dictionary_for_zone[zone][term][1].update({docID : org_val+1})
+        else: # from other docs
+          terms_dictionary_for_zone[zone][term][1].update({docID : 1})
+          terms_dictionary_for_zone[zone][term][0] += 1
       # if term doesnt exist, put doc freq as 1 and append the first posting list
-      else:
-          terms_dictionary_for_zone[zone][term] = [[],[]] # list[[int], [int, ]]; list[[doc freq], [docIds,]]
+      else: # previously non-existant
+          terms_dictionary_for_zone[zone][term] =[[],{}] # list[[int], [int, ]]; list[[doc freq], [docIds,]]
           terms_dictionary_for_zone[zone][term][0] = 1 # int; doc freq
-          terms_dictionary_for_zone[zone][term][1].append(docID + 1)
-
+          terms_dictionary_for_zone[zone][term][1].update({docID : 1})
+          # print(type(terms_dictionary_for_zone[zone][term][1]))
+    # return the inverted-index dictionary
     return terms_dictionary_for_zone
       

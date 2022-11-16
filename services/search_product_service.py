@@ -17,9 +17,7 @@ INVARIANTS: There are no invariants
 import itertools
 from utils.tokenizer import Tokenizer
 from utils.linguistic_modules import LinguisticModules
-from pandas import DataFrame
 import nltk
-import pandas as pd
 
 # this class implements the search engine
 class SearchProductService:
@@ -40,7 +38,7 @@ class SearchProductService:
   PRECONDITION: query_terms is not empty
   POSTCONDITION: posting_list is updated by being appended the appropiate documents to retrieve
   """
-  def _edit_distance(self, query_terms: list[str], posting_list: list[int], each_term: int): # private method
+  def _edit_distance(self, query_terms: list[str], posting_list: list[int]): # private method
     for term in query_terms[:]: # str       
       # for individual terms compute edit distance with each term in the 'name' inverted-index dictionary
       # this is useful if there is a typo in one or multiple of the query terms
@@ -49,13 +47,13 @@ class SearchProductService:
       # choose the min edit distance as the closest term match in the inverted-index dictionary
       if min(edit_dist_list_1[1]) >=2:
           print('No matching results')
-          return 0, 0
-      # choose the min edit distance as the closest term match in the inverted-index dictionary
+          return 0
+
       internal_query = edit_dist_list_1[0][edit_dist_list_1[1].index(min(edit_dist_list_1[1]))] # str
 
       # from the term matched in the inverted-index, append, its posting list to 'posting-list'
-      posting_list.append(list(self.inverted_index_zonal_dictionary[0]['name'][internal_query][1])) # list[[int, ], ]
-      each_term +=1
+      posting_list.append(self.inverted_index_zonal_dictionary[0]['name'][internal_query][1]) # list[[int, ], ]
+      # each_term +=1
 
   """
   NAME: _compute_higest_priority
@@ -83,30 +81,29 @@ class SearchProductService:
   PRECONDITION: a query is given and a dataframe is given.
   POSTCONDITION: postings list of high and low priority are combined and returned
   """
-  def query_processing(self, query: str) ->  list[int]:
+  def query_processing(self, query: str) -> list[dict]:
     """Search for a product based given a query string using an inverted index
     \n\n returns a tuple"""
     if query == '':
       return None, None
 
-    posting_list: list[int] = [] # list[]
-    each_term = 0 # int
+    posting_list = [] # list[]
 
     sentence_doc = Tokenizer.tokenize(str(query))
     modified_query = LinguisticModules.modify_tokens(sentence_doc)
 
-    res = self._edit_distance(modified_query, posting_list, each_term)
-    if res != None and res[0] == 0 and res[1] == 0:
-      return 0, 0
+    self._edit_distance(modified_query, posting_list)
 
-    posting_list_combined_for_and_high_priority, posting_list_combined_for_or_low_priority = self._compute_higest_priority(posting_list)
+    return posting_list
 
-    # we append the OR query after the AND query as OR is deemed as lower priority here
-    for docID_low_priority in posting_list_combined_for_or_low_priority: # int
-        if docID_low_priority not in posting_list_combined_for_and_high_priority:
-            posting_list_combined_for_and_high_priority.append(docID_low_priority + 1) # list[int,]
+    # posting_list_combined_for_and_high_priority, posting_list_combined_for_or_low_priority = self._compute_higest_priority(posting_list)
 
-    return posting_list_combined_for_and_high_priority
+    # # we append the OR query after the AND query as OR is deemed as lower priority here
+    # for docID_low_priority in posting_list_combined_for_or_low_priority: # int
+    #     if docID_low_priority not in posting_list_combined_for_and_high_priority:
+    #         posting_list_combined_for_and_high_priority.append(docID_low_priority + 1) # list[int,]
+
+    # return posting_list_combined_for_and_high_priority
 
 
     

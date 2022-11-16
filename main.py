@@ -14,7 +14,9 @@ sys.path.insert(1, dirpath)
 from flask import Flask, jsonify, request
 from controllers.zonal_inverted_index_controller import InvertedIndexZonalDictionaryController
 from controllers.search_product_controller import SearchProductController
+from controllers.search_similar_products_controller import SearchSimilarProductsController
 from services.search_product_service import SearchProductService
+from services.search_similar_products_service import SearchSimilarProductsService
 
 # creating a Flask app
 app = Flask(__name__)
@@ -32,10 +34,21 @@ def home():
 
   # instantiates classes
   searchProduct = SearchProductService(inverted_index_zonal_dictionary)
-  all_postings =  SearchProductController(searchProduct, query).execute()
-  return jsonify({ 'data': all_postings })
+  searchSimilarProducts = SearchSimilarProductsService(inverted_index_zonal_dictionary)
+  all_postings =  SearchProductController(df, searchProduct, searchSimilarProducts, query).execute()
+  return jsonify({ 'data': all_postings }) # returns top 10 products based on tf-idf
+
+@app.route('/similarity', methods = ['GET'])
+def getProductsByName():
+  args = request.args
+  name = args.get('name')
+
+  # instantiates classes
+  searchProduct = SearchProductService(inverted_index_zonal_dictionary)
+  searchSimilarProducts = SearchSimilarProductsService(inverted_index_zonal_dictionary)
+  all_postings =  SearchSimilarProductsController(df, searchProduct, searchSimilarProducts, name).execute()
+  return jsonify({ 'data': list(all_postings.keys()) })
 
 if __name__ == '__main__':
   app.run(debug = True)
-
 

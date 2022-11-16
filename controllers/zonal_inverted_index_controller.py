@@ -39,7 +39,7 @@ class InvertedIndexZonalDictionaryController:
             for docID, doc in enumerate(df[zone]): # int, str; list[(int, str), ]
               sentence_doc = Tokenizer.tokenize(str(doc))
               modified_tokens = LinguisticModules.modify_tokens(sentence_doc)
-              Indexer.build_inverted_index(zone, docID, modified_tokens)
+              Indexer.build_inverted_index(zone, docID + 1, modified_tokens)
               
     return terms_dictionary_for_zone, df
 
