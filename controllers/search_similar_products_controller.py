@@ -9,8 +9,8 @@ FOR: CS 5364 Information Retrieval Section 001
 """
 
 """
-NAME: SearchSimilarProductController 
-PURPOSE: SearchSimilarProductController class is a class uses searchSimilarProduct service query processing function and retrieves all similar product with most similar matching name in order
+NAME: SearchSimilarProductsController 
+PURPOSE: SearchSimilarProductsController class is a class uses searchSimilarProduct service query processing function and retrieves all similar product with most similar matching name in order
 INVARIANTS: There are no invariants
 """
 import numpy as np
