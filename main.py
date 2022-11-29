@@ -23,7 +23,8 @@ app = Flask(__name__)
 
 print('creating inverted index')
 
-inverted_index_zonal_dictionary, df = InvertedIndexZonalDictionaryController().execute()
+inverted_index_zonal_dictionary, df = InvertedIndexZonalDictionaryController('walmart-products-detail.csv').execute()
+inverted_index_zonal_dictionary_second, df_2 = InvertedIndexZonalDictionaryController('target_new_479products.csv').execute()
 
 # on the terminal type: curl http://127.0.0.1:5000/
 # enter a query parameter
@@ -42,12 +43,11 @@ def home():
 def getProductsByName():
   args = request.args
   name = args.get('name')
-
+  
   # instantiates classes
-  searchProduct = SearchProductService(inverted_index_zonal_dictionary)
-  searchSimilarProducts = SearchSimilarProductsService(inverted_index_zonal_dictionary)
-  all_postings =  SearchSimilarProductsController(df, searchProduct, searchSimilarProducts, name).execute()
-  return jsonify({ 'data': list(all_postings.keys()) })
+  searchSimilarProducts = SearchSimilarProductsService(inverted_index_zonal_dictionary_second)
+  all_postings =  SearchSimilarProductsController(df_2, searchSimilarProducts, name).execute()
+  return jsonify({ 'data': list(all_postings.keys())[0:1] })
 
 if __name__ == '__main__':
   app.run(debug = True)

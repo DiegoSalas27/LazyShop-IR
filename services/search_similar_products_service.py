@@ -2,14 +2,14 @@
 AUTHOR: P Shiva Kumar / Diego Salas Noain
 FILENAME: search_product_service.py
 SPECIFICATION: 
-  - We need to resolve the user's query
-  - We should be able to di this by passing the query to linguistic modules and correcting errors
+  - We need to resolve the user's click on a product
+  - We should be able to do this by passing the name of the clicked product and computing cosine similarity
 FOR: CS 5364 Information Retrieval Section 001 
 """
 
 """
-NAME: SearchProductService 
-PURPOSE: SearchProductService class is a class that executes a series of steps to process a query given by the user
+NAME: SearchSimilarProductService 
+PURPOSE: SearchSimilarProductService class is a class that implements a series of functions that helps calculating cosine similarity
 INVARIANTS: There are no invariants
 """
 
@@ -32,8 +32,15 @@ class SearchSimilarProductsService:
   POSTCONDITION: The class is injected inverted_index_zonal_dictionary dependency
   """
   def __init__(self, inverted_index_zonal_dictionary: dict[str, dict]):
-      self.inverted_index_zonal_dictionary = inverted_index_zonal_dictionary,
+      self.inverted_index_zonal_dictionary = inverted_index_zonal_dictionary
 
+  """
+  NAME: query_BOW
+  PARAMETERS: name, q_bow, bow
+  PURPOSE: Calculates query bow and l2_norm query for cosine similarity
+  PRECONDITION: We are given the name of a product and the query bows
+  POSTCONDITION: The class returns q_bow and L2_norm_query
+  """
   def query_BOW(self, name: str, q_bow: DataFrame, bow: DataFrame) -> tuple[DataFrame, float]:
     sentence_doc = Tokenizer.tokenize(str(name))
     modified_query = LinguisticModules.modify_tokens(sentence_doc)
@@ -46,6 +53,13 @@ class SearchSimilarProductsService:
     L2_norm_query = LA.norm(q_bow.to_numpy())
     return q_bow, L2_norm_query
 
+  """
+  NAME: BOW
+  PARAMETERS: doc_database, bow
+  PURPOSE: Calculates document bows for cosine similarity
+  PRECONDITION: We are given doc_database and bow dataframe
+  POSTCONDITION: The class returns bow for all the documents and L2_norm_doc for all documents
+  """
   def BOW(self, doc_database: DataFrame, bow: DataFrame) -> tuple[DataFrame, list]:
     L2_norm_doc = []
     for zone in doc_database.columns:
@@ -65,27 +79,28 @@ class SearchSimilarProductsService:
                       
     return bow, L2_norm_doc
   """
-  NAME: _edit_distance
-  PARAMETERS: query_terms, posting_list, each_term
-  PURPOSE: Calculates the distance of a term by using levenshtein distance to a given dictionary term
-  PRECONDITION: query_terms is not empty
-  POSTCONDITION: posting_list is updated by being appended the appropiate documents to retrieve
+  NAME: preprocess
+  PARAMETERS: df 
+  PURPOSE: Creates a dataframe with length of dictionary with zero values for the query. And creates a matrix of zeroes
+  for all the documents in the dataframe given
+  PRECONDITION: df is given
+  POSTCONDITION: returns initiate_query_bow and initiate_bow dataframes
   """
   def preprocess(self, df: DataFrame) -> tuple[DataFrame, DataFrame]: # private method
     # Cosine similarity
-    zero_data = np.zeros(shape=(1,len(self.inverted_index_zonal_dictionary[0]['name'].keys())))
-    initiate_query_bow = pd.DataFrame(zero_data, columns = self.inverted_index_zonal_dictionary[0]['name'].keys())
+    zero_data = np.zeros(shape=(1,len(self.inverted_index_zonal_dictionary['name'].keys())))
+    initiate_query_bow = pd.DataFrame(zero_data, columns = self.inverted_index_zonal_dictionary['name'].keys())
     
-    zero_data = np.zeros(shape=(len(df),len(self.inverted_index_zonal_dictionary[0]['name'].keys())))
-    initiate_bow = pd.DataFrame(zero_data, columns = self.inverted_index_zonal_dictionary[0]['name'].keys())
+    zero_data = np.zeros(shape=(len(df),len(self.inverted_index_zonal_dictionary['name'].keys())))
+    initiate_bow = pd.DataFrame(zero_data, columns = self.inverted_index_zonal_dictionary['name'].keys())
 
     return initiate_query_bow, initiate_bow
   """
-  NAME: _compute_higest_priority
-  PARAMETERS: posting_list
-  PURPOSE: Returns the postings list in order of priority based on AND and OR queries.
-  PRECONDITION: posting_list is not empty. The function is called after we have our postings lists.
-  POSTCONDITION: postings list of high and low priority are retrieved.
+  NAME: doc_scoring
+  PARAMETERS: term_freq, doc_freq df
+  PURPOSE: Implementgs tf-idf based on term frequency and document frequency
+  PRECONDITION: term_freq, doc_freq df are given
+  POSTCONDITION: returns sorted scored documents
   """
   def doc_scoring(self, term_freq: dict, doc_freq: list[int], df: DataFrame) -> dict:
     score = {}
@@ -112,11 +127,11 @@ class SearchSimilarProductsService:
     return dict(sorted(doc_score.items(), key = lambda x : x[1], reverse= True))
 
   """
-  NAME: query_processing
-  PARAMETERS: query, df
-  PURPOSE: Orchestrates through helper methods and utility classes to process the user's query
-  PRECONDITION: a query is given and a dataframe is given.
-  POSTCONDITION: postings list of high and low priority are combined and returned
+  NAME: tf_df
+  PARAMETERS: posting_list
+  PURPOSE: Calculates the term frequency and the document frequency
+  PRECONDITION: posting_list is given
+  POSTCONDITION: returns term frequency and the document frequency
   """
   def tf_df(self, posting_list: list[dict]) ->  tuple[dict, list[int]]:
     """Search for a product based given a query string using an inverted index

@@ -21,16 +21,27 @@ from utils.indexer import Indexer
 
 class InvertedIndexZonalDictionaryController: 
   """
+  NAME: __init__
+  PARAMETERS: name
+  PURPOSE: injects dependencies to this class
+  PRECONDITION: The class is passed it's dependencies via instantiation
+  POSTCONDITION: The class is injected name dependencies
+  """
+  def __init__(
+    self, 
+    name: str):
+      self.name = name
+  """
   NAME: execute
   PARAMETERS: none
-  PURPOSE: Creates a zonal inverted index
-  PRECONDITION: No precondition
-  POSTCONDITION: Retrieves an zonal inverted index by updating the terms_dictionary_for_zone dictionary and retrieves the df for further use
+  PURPOSE: Creation of zonal inverted index
+  PRECONDITION: A name parameter is given to get the corresponding csv file
+  POSTCONDITION: Retrieves a zonal inverted index used for ranking and cosine similarity
   """
   def execute(self) -> tuple[dict[str, dict], pd.DataFrame]: 
     """Executes a series of services.
     \n\n returns what its implementation is meant to return"""
-    df = pd.read_csv("walmart-products-detail.csv", encoding='latin1')
+    df = pd.read_csv(self.name, encoding='latin1')
 
     for zone in df.columns:
         # only doing indexing for the chosen zones above

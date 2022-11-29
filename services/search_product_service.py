@@ -3,7 +3,7 @@ AUTHOR: P Shiva Kumar / Diego Salas Noain
 FILENAME: search_product_service.py
 SPECIFICATION: 
   - We need to resolve the user's query
-  - We should be able to di this by passing the query to linguistic modules and correcting errors
+  - We should be able to do this by passing the query to linguistic modules and correcting errors
 FOR: CS 5364 Information Retrieval Section 001 
 """
 
@@ -95,15 +95,6 @@ class SearchProductService:
     self._edit_distance(modified_query, posting_list)
 
     return posting_list
-
-    # posting_list_combined_for_and_high_priority, posting_list_combined_for_or_low_priority = self._compute_higest_priority(posting_list)
-
-    # # we append the OR query after the AND query as OR is deemed as lower priority here
-    # for docID_low_priority in posting_list_combined_for_or_low_priority: # int
-    #     if docID_low_priority not in posting_list_combined_for_and_high_priority:
-    #         posting_list_combined_for_and_high_priority.append(docID_low_priority + 1) # list[int,]
-
-    # return posting_list_combined_for_and_high_priority
 
 
     

@@ -2,7 +2,7 @@
 AUTHOR: Diego Salas Noain
 FILENAME: search_product_controller.py
 SPECIFICATION: 
-  - Need to have a point of entry for resolving a query
+  - Need to have a point of entry for resolving a query and retrieving top 10 products
   - Create a controller class that can do that work
 FOR: CS 5364 Information Retrieval Section 001 
 """
@@ -20,10 +20,10 @@ from services.search_similar_products_service import SearchSimilarProductsServic
 class SearchProductController:
   """
   NAME: __init__
-  PARAMETERS: searchProduct, df, query
+  PARAMETERS: df, searchProduct, searchSimilarProducts, query
   PURPOSE: injects dependencies to this class
   PRECONDITION: The class is passed it's dependencies via instantiation
-  POSTCONDITION: The class is injected searchProduct, df, query dependencies
+  POSTCONDITION: The class is injected searchProduct, searchSimilarProducts, df, query dependencies
   """
   def __init__(
     self, 
@@ -41,7 +41,7 @@ class SearchProductController:
   PARAMETERS: none
   PURPOSE: Resolves a user query
   PRECONDITION: The zonal inverted index has been created and both the DataFrame and query are given
-  POSTCONDITION: Retrieves all postings and the documents
+  POSTCONDITION: Retrieves top 10 documents based on tf_df ranking
   """
   def execute(self) -> list[int]:
     """Executes a series of services.
