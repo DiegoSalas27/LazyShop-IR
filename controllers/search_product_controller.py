@@ -1,5 +1,5 @@
 """
-AUTHOR: Diego Salas Noain
+AUTHOR: P Shiva Kumar / Diego Salas Noain
 FILENAME: search_product_controller.py
 SPECIFICATION: 
   - Need to have a point of entry for resolving a query and retrieving top 10 products

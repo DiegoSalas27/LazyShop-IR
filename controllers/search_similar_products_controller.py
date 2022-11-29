@@ -1,5 +1,5 @@
 """
-AUTHOR: Diego Salas Noain
+AUTHOR: P Shiva Kumar / Diego Salas Noain
 FILENAME: search_similar_products_controller.py
 SPECIFICATION:  
   - Need to have a point of entry for solving a query based on a product name

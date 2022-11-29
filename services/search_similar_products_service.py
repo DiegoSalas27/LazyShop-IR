@@ -1,6 +1,6 @@
 """
 AUTHOR: P Shiva Kumar / Diego Salas Noain
-FILENAME: search_product_service.py
+FILENAME: search_similar_product_service.py
 SPECIFICATION: 
   - We need to resolve the user's click on a product
   - We should be able to do this by passing the name of the clicked product and computing cosine similarity
