@@ -64,8 +64,11 @@ class SearchProductService:
   """
   def _compute_higest_priority(self, posting_list: list[int]) -> tuple[list[int], list[int]]: # private method
     # for mutltiple query terms, the highest priority posting lists are ones which has ALL the terms in the query (AND query) 
-    posting_list_combined_for_and_high_priority = set.intersection(*map(set, posting_list)) # set[int, ]
-    posting_list_combined_for_and_high_priority = list(posting_list_combined_for_and_high_priority) # list[int, ]
+    if posting_list:
+        posting_list_combined_for_and_high_priority = set.intersection(*map(set, posting_list)) # set[int, ]
+        posting_list_combined_for_and_high_priority = list(posting_list_combined_for_and_high_priority) # list[int, ]
+    else:
+        posting_list_combined_for_and_high_priority = []
 
     # for multiple query terms, we also get (OR query)
     posting_list_combined = list(itertools.chain(*posting_list)) # list[int, ]
@@ -84,7 +87,8 @@ class SearchProductService:
   def query_processing(self, query: str) -> list[dict]:
     """Search for a product based given a query string using an inverted index
     \n\n returns a tuple"""
-    if query == '':
+
+    if query == ' ' or query == '':
       return None, None
 
     posting_list = [] # list[]
