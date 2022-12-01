@@ -29,7 +29,7 @@ class SearchProductService:
   POSTCONDITION: The class is injected inverted_index_zonal_dictionary dependency
   """
   def __init__(self, inverted_index_zonal_dictionary: dict[str, dict]):
-      self.inverted_index_zonal_dictionary = inverted_index_zonal_dictionary,
+      self.inverted_index_zonal_dictionary = inverted_index_zonal_dictionary
 
   """
   NAME: _edit_distance
@@ -42,7 +42,7 @@ class SearchProductService:
     for term in query_terms[:]: # str       
       # for individual terms compute edit distance with each term in the 'name' inverted-index dictionary
       # this is useful if there is a typo in one or multiple of the query terms
-      edit_dist_list = [[key, nltk.edit_distance(term, key)]  for key in self.inverted_index_zonal_dictionary[0]['name']] # list[[str, double], ]
+      edit_dist_list = [[key, nltk.edit_distance(term, key)]  for key in self.inverted_index_zonal_dictionary['name']] # list[[str, double], ]
       edit_dist_list_1 = list(zip(*edit_dist_list)) # list[(str,)(double,)]
       # choose the min edit distance as the closest term match in the inverted-index dictionary
       if min(edit_dist_list_1[1]) >=2:
@@ -52,7 +52,7 @@ class SearchProductService:
       internal_query = edit_dist_list_1[0][edit_dist_list_1[1].index(min(edit_dist_list_1[1]))] # str
 
       # from the term matched in the inverted-index, append, its posting list to 'posting-list'
-      posting_list.append(self.inverted_index_zonal_dictionary[0]['name'][internal_query][1]) # list[[int, ], ]
+      posting_list.append(self.inverted_index_zonal_dictionary['name'][internal_query][1]) # list[[int, ], ]
       # each_term +=1
 
   """

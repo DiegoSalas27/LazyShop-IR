@@ -1,7 +1,8 @@
 # LazyShop-IR
 This is the Information Retrieval System for Lazy Shop. This system reads from a csv file that contains product details
 structured by name, rating, type_of, price, comments which where created by the LazyShop web scraping project. It creates
-A Zonal Inverted Index and solve user queries by running linguistic modules from nltk package.
+A Zonal Inverted Index and solve user queries by running linguistic modules from nltk package. It implements td-idf to
+perform document raking, and cosine similarity to display similar products to the one a user selects
 
 ## install dependencies:
 ```

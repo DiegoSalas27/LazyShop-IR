@@ -14,7 +14,6 @@ INVARIANTS: There are no invariants
 """
 
 import pandas as pd
-from constants import terms_dictionary_for_zone
 from utils.tokenizer import Tokenizer
 from utils.linguistic_modules import LinguisticModules
 from utils.indexer import Indexer
@@ -43,15 +42,38 @@ class InvertedIndexZonalDictionaryController:
     \n\n returns what its implementation is meant to return"""
     df = pd.read_csv(self.name, encoding='latin1')
 
+    terms_dictionary_for_zone = {
+            'name': { },
+            'type_of': { },
+            'comments': { }
+            }
     for zone in df.columns:
         # only doing indexing for the chosen zones above
         if zone in terms_dictionary_for_zone.keys():
             # saving docID and the row content for the chosen zones
-            for docID, doc in enumerate(df[zone]): # int, str; list[(int, str), ]
-              sentence_doc = Tokenizer.tokenize(str(doc))
-              modified_tokens = LinguisticModules.modify_tokens(sentence_doc)
-              Indexer.build_inverted_index(zone, docID + 1, modified_tokens)
-              
-    return terms_dictionary_for_zone, df
+            for docID, doc in enumerate(df[zone], 1): # int, str; list[(int, str), ]
+                
+                # tokenises the words in the row of the selected zone based on NLTK vocab
+                sentence_doc = Tokenizer.tokenize(str(doc))
+                # stems all words in doc
+                modified_tokens = LinguisticModules.modify_tokens(sentence_doc)
 
+                for term in modified_tokens: # 'str'
+                    # for each zone the term increased in doc freq and appends the posting list if term exists
+                        if term in terms_dictionary_for_zone[zone]: # previously from this doc or other docs
+                            # print(term, terms_dictionary_for_zone[zone], type(terms_dictionary_for_zone[zone][term][1]))
+                            if docID in terms_dictionary_for_zone[zone][term][1].keys(): # previously from this doc
+                                org_val = terms_dictionary_for_zone[zone][term][1][docID]
+                                terms_dictionary_for_zone[zone][term][1].update({docID : org_val+1})
+                            else: # from other docs
+                                terms_dictionary_for_zone[zone][term][1].update({docID : 1})
+                                terms_dictionary_for_zone[zone][term][0] += 1
+                                
+                        # if term doesnt exist, put doc freq as 1 and append the first posting list
+                        else: # previously non-existant
+                            terms_dictionary_for_zone[zone][term] =[[],{}] # list[[int], [int, ]]; list[[doc freq], [docIds,]]
+                            terms_dictionary_for_zone[zone][term][0] = 1 # int; doc freq
+                            terms_dictionary_for_zone[zone][term][1].update({docID : 1})
+
+    return terms_dictionary_for_zone, df
     

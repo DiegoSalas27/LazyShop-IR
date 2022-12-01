@@ -26,7 +26,7 @@ class Indexer:
   POSTCONDITION: This function should return an updated dictionary
   """
   @staticmethod
-  def build_inverted_index(zone: str, docID: int, modified_tokens: list[str]) -> dict[str, dict]:
+  def build_inverted_index(zone: str, docID: int, modified_tokens: list[str]) -> None:
     """Builds the inverted index based on the modified tokens from the linguistic modules
     \n\n returns the inverted index dictionary"""
     for term in modified_tokens: # 'str'
@@ -45,5 +45,4 @@ class Indexer:
           terms_dictionary_for_zone[zone][term][1].update({docID : 1})
           # print(type(terms_dictionary_for_zone[zone][term][1]))
     # return the inverted-index dictionary
-    return terms_dictionary_for_zone
       
