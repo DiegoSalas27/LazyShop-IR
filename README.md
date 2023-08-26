@@ -15,7 +15,7 @@ Once the Zonal Inverted Index is created, LazyShop IR solves client queries that
 When a client clicks on a product the same or the most similar product from other stores are retrieved using cosine similarity in order for the client to compare prices. In order to do this, the following steps take place:
 1. dataframes from bag of words are created
 2. caculate document bag of words for cosine similarity
-3. cosine similarity is calculated and the most similar product (if a the same product is found in different stores, it will be retrieved as it is a exact match) is retrieved.
+3. cosine similarity is calculated and the most similar product is retrieved (if a the same product is found in different stores, it will be retrieved as it is a exact match).
 
 ## install dependencies:
 ```
