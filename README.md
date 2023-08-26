@@ -26,3 +26,6 @@ pip install -r requirements.txt
 ```
 python -m streamlit run main.py
 ```
+
+Demo:
+https://www.youtube.com/watch?v=h9S-YwZ4o2M
